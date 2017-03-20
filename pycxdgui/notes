@@ -1,0 +1,15 @@
+Some notes for things to do:
+- kill a pyqtgraph window (how to kill ref to window, where are refs saved globally?)
+- plot window center 
+- add color scales
+- method to click and receive point (one time)
+- replace circavg and qphiavg with skbeam version
+
+dependencies:
+- installing latest pyqtgraph (in case current version doesn't work, color map error etc):
+$ git clone https://github.com/pyqtgraph/pyqtgraph.git
+$ cd pyqtgraph
+$ git branch develop #(make sure to have the development branch selected)
+$ python setup.py install #(you may need to be root if you don't have a conda environment)
+- pyqtgraph, PyQt4, numpy, scipy, scikit-beam
+
