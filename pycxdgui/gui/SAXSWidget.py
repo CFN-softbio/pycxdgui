@@ -83,6 +83,9 @@ class SAXSWidget(QtGui.QWidget):
         self.setLayout(vbox)
         self.image_imv.show()
 
+    def setAspectLock(self, val):
+        self.image_imv.view.setAspectLocked(val)
+
     def changeGridding(self):
         ''' read value from self.gridinput and set gridding to that.'''
         # change in view input box and also parameter tree (saxsdata)

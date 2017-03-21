@@ -29,6 +29,10 @@ class ImageMainWindow(QtGui.QMainWindow):
     def setImage(self,img,levels=(0,1)):
         self.imgv.setImage(img,levels=levels)
 
+    def setAspectLock(self, val):
+        self.imgv.view.setAspectLocked(val)
+
+
 class ImageWindow(pg.ImageView):
     def __init__(self, *args, **kwargs):
         super(ImageWindow,self).__init__(*args, **kwargs)

@@ -122,6 +122,9 @@ class SAXSGUI(QtGui.QMainWindow):
         listenToggleAction = self.mkAction('icons/listen.png', 'Toggle listen', 
                                    None, 'Toggle listen', self.toggle_listen_for_newfiles)
 
+        aspectToggleAction = self.mkAction('icons/aspect.png', 'Lock/Unlock Aspect Ratio', 
+                                   None, 'Lock/Unlock Aspect Ratio', self.toggle_aspect)
+
         # menu bar
         filemenu = menubar.addMenu('&File')
         filemenu.addAction(loadEAction)
@@ -133,6 +136,7 @@ class SAXSGUI(QtGui.QMainWindow):
         filemenu.addAction(sqphiAction)
         filemenu.addAction(deltaphicorrAction)
         filemenu.addAction(listenToggleAction)
+        filemenu.addAction(aspectToggleAction)
 
         # tool bar
         self.toolbar = self.addToolBar("EIGER quick access")
@@ -145,17 +149,24 @@ class SAXSGUI(QtGui.QMainWindow):
         self.toolbar.addAction(sqphiAction)
         self.toolbar.addAction(deltaphicorrAction)
         self.toolbar.addAction(listenToggleAction)
+        self.toolbar.addAction(aspectToggleAction)
 
         self.setWindowTitle("EIGER Data Visualizor")
 
         #self.showDataTable()
 
         self.imgwidget = SAXSWidget(self) #spawns the ui for the image etc
+        self._aspectlock = True
+        self.imgwidget.setAspectLock(self._aspectlock)
         self.setCentralWidget(self.imgwidget)
         # initial draw
         self.imgwidget.redrawimg()
 
         self.show()
+
+    def toggle_aspect(self):
+        self._aspectlock = not self._aspectlock
+        self.imgwidget.setAspectLock(self._aspectlock)
 
     def showDataTable(self):
         ''' Show the data table'''
