@@ -50,8 +50,8 @@ MAXCTS = 65535 # for proper image color scale display, ignore high values
 
 # the different extensions accepted
 _file_filters = {
-        'master.h5' : 'EigerImage File (*master.h5)',
         '.tif' : 'tif File (*.tif *tiff)',
+        'master.h5' : 'EigerImage File (*master.h5)',
         'all' : 'All Files (*)'
         }
 

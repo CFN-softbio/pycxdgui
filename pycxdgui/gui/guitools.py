@@ -11,8 +11,8 @@ def findLowHigh(img, maxcts=None):
     hh,bb = np.histogram(img.ravel()[w], bins=maxcts, range=(1,maxcts))
     hhs = np.cumsum(hh)
     hhs = hhs/np.sum(hh)
-    wlow = np.where(hhs > .15)[0] #5%
-    whigh = np.where(hhs < .85)[0] #95%
+    wlow = np.where(hhs > .01)[0] #5%
+    whigh = np.where(hhs < .99)[0] #95%
     if len(wlow):
         low = wlow[0]
     else:
