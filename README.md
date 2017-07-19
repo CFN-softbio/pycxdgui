@@ -1,18 +1,12 @@
 # Simple GUI for xray image viewing/analysis
 
+See buildenv.sh for a sample script on how to setup. Requires anaconda.
+
 
 Running:
-    ipython
-    %run startGUI.py
+    python startGUI.py
 
 Dependencies:
 
-numpy
-scipy
-h5py
-ipython
-tqdm
-scikit-beam
-cython
-pyqtgraph
-pandas
+- python3.5 PyQt4 numpy h5py pip
+- pims pillow tqdm scipy scikit-image pandas cython
