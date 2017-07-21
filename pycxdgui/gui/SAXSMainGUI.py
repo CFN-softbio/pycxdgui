@@ -23,8 +23,9 @@ from gui.colormaps import makeALBULACmap
 from gui.FileListener import FileListener
 
 import pyqtgraph as pg
-from PyQt4 import QtGui
-from PyQt4.QtCore import SIGNAL
+from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSignal
+from PyQt5 import QtCore
 
 import os
 import os.path
@@ -60,9 +61,13 @@ class SAXSGUI(QtGui.QMainWindow):
             and dockable toolbars. I will add a central widget to the
             window which will have its own layout.'''
 
+    # metaclassed, needs to be here
+    signal_imageupdated = pyqtSignal()#name="imageupdated()")
+
     def __init__(self, configfile=None, verbose=False):
         ''' This starts the SAXS GUI.'''
         super(SAXSGUI, self).__init__()
+
         self.imgreader = None
         self.avg_img, self.Ivst = None, None
         self.verbose = verbose
@@ -91,8 +96,8 @@ class SAXSGUI(QtGui.QMainWindow):
 
         # UI stuff
         self.initUI()
-        self.connect(self.filelistener, SIGNAL("newerfile(QString)"), self.load_newfile)
-        self.connect(self, SIGNAL("imageupdated()"), self.reprocess_and_draw)
+        self.filelistener.signal_newerfile.connect(self.load_newfile)
+        self.signal_imageupdated.connect(self.reprocess_and_draw)
 
     def initUI(self):
         ''' Initialize the user interface.
@@ -108,7 +113,7 @@ class SAXSGUI(QtGui.QMainWindow):
         loadMAction = self.mkAction('icons/loadM.png', '&Open Mask File', 
                                     None, 'Open Mask File', self.openmaskfile)
         exitAction = self.mkAction('icons/quit.png', '&Exit', 'Ctrl+W', 
-                                   'Exit Application', QtGui.qApp.quit)
+                                   'Exit Application', QtWidgets.qApp.quit)
         maskAction = self.mkAction('icons/mpolyicon.png', '&Make Mask', 
                                    None, 'Make new mask', self.startmasking)
         dataTableAction = self.mkAction('icons/datatable.png', 'View Data Table', 
@@ -228,7 +233,7 @@ class SAXSGUI(QtGui.QMainWindow):
                 filt_string = filt_string + ";;"
             filt_string = filt_string + file_filters[key]
 
-        filename = QtGui.QFileDialog.getOpenFileName(self, 'Open data file', self.getDDIR(), filt_string)
+        filename, filetype = QtGui.QFileDialog.getOpenFileName(self, 'Open data file', self.getDDIR(), filt_string)
         if(len(filename)):
             print("opening file {}".format(filename))
             self.load_img(filename=filename)
@@ -303,7 +308,7 @@ class SAXSGUI(QtGui.QMainWindow):
             print("Did not load any images. Make sure filename and parent directory DDIR are set: {}".format(filename))
             return False
 
-        self.emit(SIGNAL("imageupdated()"))
+        self.signal_imageupdated.emit()
         return True
 
     def reprocess_and_draw(self):

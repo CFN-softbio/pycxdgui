@@ -1,4 +1,4 @@
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 from gui.SAXSMainGUI import SAXSGUI
 import sys
 

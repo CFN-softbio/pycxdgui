@@ -1,5 +1,5 @@
 import pyqtgraph as pg
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 from gui.guitools import findLowHigh
 
 from gui.colormaps import makeALBULACmap
