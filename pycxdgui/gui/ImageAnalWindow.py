@@ -1,11 +1,11 @@
-#from PyQt4 import QtGui, QtCore
+#from PyQt5 import QtGui, QtCore
 
 import pyqtgraph as pg
 import numpy as np
 
 from gui.colormaps import makeALBULACmap, makeALBULALUT
 from gui.guitools import findLowHigh
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 
 from tools.smooth import smooth2Dgauss
 

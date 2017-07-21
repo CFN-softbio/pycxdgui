@@ -11,5 +11,5 @@ $ git clone https://github.com/pyqtgraph/pyqtgraph.git
 $ cd pyqtgraph
 $ git branch develop #(make sure to have the development branch selected)
 $ python setup.py install #(you may need to be root if you don't have a conda environment)
-- pyqtgraph, PyQt4, numpy, scipy, scikit-beam
+- pyqtgraph, PyQt5, numpy, scipy, scikit-beam
 
