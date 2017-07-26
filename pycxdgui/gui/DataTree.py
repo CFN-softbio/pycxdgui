@@ -8,6 +8,26 @@ from pyqtgraph.parametertree import Parameter, ParameterTree,\
 
 from tools.optics import calc_q
 
+from classes.Calibration import Calibration
+
+def calibration_from_datatree(saxsdata, det_width, det_height):
+    ''' Compute a calibration instance from saxsdata tree and
+    det_width, det_height : detector dimensions.'''
+
+    a = float(saxsdata.getelem("setup","dpix"))
+    L = float(saxsdata.getelem("setup","rdet"))
+    xcen = float(saxsdata.getelem("setup","xcen"))
+    ycen = float(saxsdata.getelem("setup","ycen"))
+    wv = float(saxsdata.getelem("setup","wavelength"))
+    if a is not None and L is not None and wv is not None and xcen is not None and ycen is not None:
+        calib = Calibration(wavelength_A=wv, distance_m=L, pixel_size_um=a,
+                 x0=xcen, y0=ycen, width=det_width, height=det_height)
+        #, det_orient=0.,
+                 #det_tilt=0., det_phi=0., incident_angle=0., sample_normal=0.):
+
+    return calib
+
+
 class DataTree(QtGui.QWidget):
     ''' Takes a list of dictionaries (can be nested) of triplets
         which have keys 'name', 'type' and 'value' (or 'children' if 'type'=group
@@ -107,6 +127,8 @@ params = [
         {'name' : 'imganal', 'type' : 'group', 'children' : dictfromparams(imganallst)},
         ]
 
+# TODO : signal that detects change in detector width
+
 class SAXSDataTree(DataTree):
     def __init__(self,configfile=None):
         super(SAXSDataTree, self).__init__(params)
@@ -114,14 +136,17 @@ class SAXSDataTree(DataTree):
         if configfile is not None:
             self.loadfromcsv(configfile)
         # now calculate typical SAXS stuff
+        self.calc_q()
+
+    # these should be moved to DataTree
+
+    def calc_q(self):
         a = float(self.getelem("setup","dpix"))
         L = float(self.getelem("setup","rdet"))
         wv = float(self.getelem("setup","wavelength"))
         if a is not None and L is not None and wv is not None:
             qperpixel = calc_q(L,a,wv)
         self.setelem("setup", "qperpixel", qperpixel)
-
-    # these should be moved to DataTree
 
     def loadfromcsv(self,configfile):
         ''' Load from a csv config file
@@ -187,6 +212,7 @@ class SAXSDataTree(DataTree):
 
     # these are more SAXS stuff, shortcuts for common commands
     def getqperpixel(self):
+        self.calc_q()
         return float(self.getelem("setup","qperpixel"))
 
     def getrdet(self):

@@ -264,7 +264,7 @@ class SAXSGUI(QtGui.QMainWindow):
         self.listen_for_newfiles = not self.listen_for_newfiles
         print("Toggled the file listening, listening is now {}".format(self.listen_for_newfiles))
 
-    def load_newfile(self,filename):
+    def load_newfile(self, filename):
         ''' Wrapper to load new file only if listen is on.'''
         if self.listen_for_newfiles:
             self.load_img(filename)

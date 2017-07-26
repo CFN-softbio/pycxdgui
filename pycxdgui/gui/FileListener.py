@@ -49,7 +49,9 @@ class FileListener(QThread):
             if result is not None:
                 # send signal that file changed
                 print("Found new file: {}".format(result))
-                self.signal_newerfile.emit(result)
+                # TODO : fix file listener (signal passing args problem)
+                print("ignoring for now")
+                #self.signal_newerfile.emit(result)
 
     def check_newest_file(self):
         ''' Check for latest image in directory

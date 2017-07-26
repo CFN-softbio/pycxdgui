@@ -6,18 +6,18 @@
 setup,extension,".tiff", # the extension to look for by default (for looping)
 #setup,DDIR,"/media/chxlive/2016/08/22", # the parent directory
 #setup,DDIR,"/home/lhermitte/research/data/nanolithimgs/litho4/16-06-30-RefDots2", # the parent directory
-setup,DDIR,"/home/julienl/Downloads", # the parent directory
-setup,SDIR,"/home/julienl/Downloads", # the storage directory
-setup,xcen,1343, #the beam x center (x is fastest varying dimension in array)
-setup,ycen,1368, # the beam y center
+setup,DDIR,"."# the parent directory
+setup,SDIR,".", # the storage directory
+setup,xcen,258, #the beam x center (x is fastest varying dimension in array)
+setup,ycen,336, # the beam y center
 setup,wait_time,.1, # the wait time for file listening
 #setup,mask_name,"../storage/mask_B006_ring1.hd5", # the mask name
-setup,mask_name,"../storage/mask_B008_2_cheng.hd5", # the mask name
+setup,mask_name,"test.tiff", # the mask name
 setup,mask_threshold,1, # the values that define masked and unmasked region >=
-setup,rdet,4.81, # sample-detector distance in m
+setup,rdet,5, # sample-detector distance in m
 setup,energy,9.646, #in keV
 setup,wavelength,1.285299, #in angstroms
-setup,dpix,75e-6, # pixel size in m
+setup,dpix,172, # pixel size in um
 # first filename
 setup,filename,"/media/xray/NSLSII_Data/CHX/2016/07/18/f822375f-eb16-4018-bda6_2259_master.h5"
 #

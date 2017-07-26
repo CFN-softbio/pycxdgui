@@ -2,6 +2,7 @@ from PyQt5 import QtGui, QtCore
 
 import pyqtgraph as pg
 from tools.smooth import smooth2Dgauss
+from tools.circavg2 import circavg2
 from gui.ImageWindow import ImageWindow, ImageMainWindow
 
 import numpy as np
@@ -14,6 +15,8 @@ from tools.qphiavg import qphiavg
 from tools.qphicorr import deltaphicorr, deltaphicorr_qphivals, normsqcphi
 
 from gui.ImageAnalWindow import ImageAnalWindow
+
+from gui.DataTree import calibration_from_datatree
 
 
 def mouseMoved(ev):
@@ -197,11 +200,30 @@ class SAXSWidget(QtGui.QWidget):
     def circavg(self):
         ''' calculate and plot circular average.'''
         if hasattr(self.saxsdata,"mask") and self.saxsdata.mask is not None:
+            # TODO : move this to mask loading, reorgnaize mask loading
             mask = self.saxsdata.mask
+            if mask.ndim == 3:
+                mask = mask[:,:,0]
         else:
             mask = None
-        sqx, sqy = circavg(self.saxsdata.avg_img, x0=self.saxsdata.getxcen(), y0=self.saxsdata.getycen(),\
-                            noqs=self.saxsdata.getnoqs_circavg(), mask=mask)
+        #sqx, sqy = circavg(self.saxsdata.avg_img, x0=self.saxsdata.getxcen(), y0=self.saxsdata.getycen(),\
+                            #noqs=self.saxsdata.getnoqs_circavg(), mask=mask)
+        # REMOVE ME
+        det_height, det_width = self.saxsdata.avg_img.shape
+        # TODO : make this more permanent
+        print("Computing calibration from saxs data")
+        self.calibration = calibration_from_datatree(self.saxsdata.saxsdata, det_width, det_height)
+        q_map = self.calibration.q_map
+        r_map = self.calibration.r_map
+        self.saxsdata.saxsdata.getelem("circavg","noqs")
+        print("Computing circular average")
+        print("qmap size {}".format(q_map.shape))
+        print("mask size {}".format(mask.shape))
+        print("img size {}".format(self.saxsdata.avg_img.shape))
+        sqx, sqy, sqxerr, sqyerr = circavg2(self.saxsdata.avg_img, q_map=q_map,
+                                            r_map=r_map, mask=mask)
+        #def circavg2(image, q_map=None, r_map=None,  bins=None, mask=None):
+        #sqx = sqx*self.saxsdata.getqperpixel()
         p1 = pg.plot(sqx,sqy)
         p1.getPlotItem().setLogMode(True,True)
 
