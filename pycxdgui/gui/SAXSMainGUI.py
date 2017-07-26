@@ -190,6 +190,9 @@ class SAXSGUI(QtGui.QMainWindow):
             mask = None
         else:
             mask = self.mask.astype(float)
+        # TODO : make general fucntion
+        if self.avg_img is None:
+            self.avg_img = np.ones((100,100))
         self.maskprog = MPoly(self.avg_img.astype(float),mask=None)
 
     def circavg(self):

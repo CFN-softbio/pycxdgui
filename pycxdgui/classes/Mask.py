@@ -21,7 +21,7 @@ def mask_open_tiff(filename):
 
 def mask_save_tiff(filename, mask):
     mask = Image.fromarray(mask.astype(np.uint8))
-    mask.save(filename)
+    mask.save(filename, format="tiff")
 
 
 class Mask:
@@ -55,7 +55,7 @@ class Mask:
         if shape is not None:
             self.mask = np.zeros(shape, dtype=int)
         if mask is not None:
-            self.mask = np.copy(mask, dtype=int)
+            self.mask = np.copy(mask).astype(int)
 
         self.ftype = ftype
 
@@ -72,13 +72,15 @@ class Mask:
         self.fill(1)
 
     def exclude(self, pixels):
-        self.mask[pixels] = 0
+        if pixels is not None:
+            self.mask[pixels] = 0
 
     def include(self, pixels):
-        self.mask[pixels] = 1
+        if pixels is not None:
+            self.mask[pixels] = 1
 
     def get_ftype_from_filename(self, filename):
-        if filename.lower().endswith('tif') or filename.lower().endswith('tiff'):
+        if 'tif' in filename.lower():
             ftype = 'tif'
         elif 'hd5' in filename or 'h5' in filename:
             ftype = 'hd5'
@@ -108,6 +110,7 @@ class Mask:
         return mask
 
     def save(self, maskfilename, ftype=None):
+        print(maskfilename)
         if ftype is None:
             ftype = self.get_ftype_from_filename(maskfilename)
         self.ftype = ftype

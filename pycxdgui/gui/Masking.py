@@ -7,6 +7,8 @@ import pdb
 import h5py
 import os
 
+from PIL import Image
+
 from classes.Mask import Mask
 
 from gui.guitools import findLowHigh
@@ -28,6 +30,10 @@ class MPoly(QtGui.QMainWindow):
                 See their respective comments.
         '''
         super(MPoly, self).__init__()
+        # TODO : remove and add error checking
+        if img is None:
+            img = np.ones((100,100))
+        self.blemish = np.ones_like(img)
         self.setimgdata(img.astype(float))
         self.points = []
         self.plotw = pg.GraphicsLayoutWidget()#plot widget
@@ -143,6 +149,7 @@ class MPoly(QtGui.QMainWindow):
             self._mask = Mask(mask=mask)
 
         self.blemish = np.ones(self.imgdata.shape,dtype=float);
+
         self.img.setImage(self.imgdata, xvals=np.linspace(0., .5, self.imgdata.shape[0]),levels=(low,high))
         self.mimg.setImage(self.mask,autoLevels=False,levels=[0,2])
         self.hist.setImageItem(self.img)
@@ -242,11 +249,14 @@ class MPoly(QtGui.QMainWindow):
         #poss.shape = cols,rows
         possx.shape = cols,rows
         possy.shape = cols,rows
-        mpossx = self.roi.getArrayRegion(possx,self.img).astype(int)
-        mpossx = mpossx[np.nonzero(mpossx)]-1
-        mpossy = self.roi.getArrayRegion(possy,self.img).astype(int)
-        mpossy = mpossy[np.nonzero(mpossy)]-1
-        return (mpossx,mpossy)
+        try:
+            mpossx = self.roi.getArrayRegion(possx,self.img).astype(int)
+            mpossx = mpossx[np.nonzero(mpossx)]-1
+            mpossy = self.roi.getArrayRegion(possy,self.img).astype(int)
+            mpossy = mpossy[np.nonzero(mpossy)]-1
+            return (mpossx,mpossy)
+        except AttributeError:
+            return None
 
     def imaskFromROI(self):
         '''Include ROI in mask.'''
@@ -254,18 +264,24 @@ class MPoly(QtGui.QMainWindow):
         px = self.findPixels()
         self._mask.include(px)
         #self.mask[px] = 1*self.blemish[px]
-        self.plot.removeItem(self.roi)
-        self.mimg.setImage(self.mask,autoLevels=False,levels=[0,2])
-        del self.roi
+        try:
+            self.plot.removeItem(self.roi)
+            self.mimg.setImage(self.mask*self.blemish,autoLevels=False,levels=[0,2])
+            del self.roi
+        except AttributeError:
+            pass
 
     def xmaskFromROI(self):
         '''Exclude ROI in mask.'''
         px = self.findPixels()
         #self.mask[px] *= 0
         self._mask.exclude(px)
-        self.plot.removeItem(self.roi)
-        self.mimg.setImage(self.mask,autoLevels=False,levels=[0,2])
-        del self.roi
+        try:
+            self.plot.removeItem(self.roi)
+            self.mimg.setImage(self.mask*self.blemish,autoLevels=False,levels=[0,2])
+            del self.roi
+        except AttributeError:
+            pass
 
     def clearMask(self):
         '''Clear the mask. No blemish needed.'''
@@ -279,20 +295,20 @@ class MPoly(QtGui.QMainWindow):
         self.clearROI()
         #self.mask = (self.mask*0 + 1)*self.blemish
         self._mask.one()
-        self._mask.exclude(blemish==0)
+        self._mask.exclude(self.blemish==0)
         self.mimg.setImage(self.mask,autoLevels=False,levels=[0,2])
 
     def setmask(self,mask):
-        self.mask = mask.T
+        self.mask = mask
 
     def getmask(self):
-        return self.mask.T
+        return self.mask
 
     def setimgdata(self, imgdata):
-        self.imgdata = imgdata.T
+        self.imgdata = imgdata
 
     def openMask(self):
-        self.maskfilename= str(QtGui.QFileDialog.getOpenFileName(self, "Open Mask", self.datatable['SDIR'],'Mask File (*mask*.hd5 *mask*.tif *mask*.tiff);;All Files (*)'))
+        self.maskfilename= str(QtGui.QFileDialog.getOpenFileName(self, "Open Mask", self.datatable['SDIR'],'Mask File (*mask*.hd5 *mask*.tif *mask*.tiff);;All Files (*)')[0])
         if(os.path.isfile(self.maskfilename)):
             self._mask.load(self.maskfilename)
             #f = h5py.File(self.maskfilename,"r")
@@ -305,7 +321,7 @@ class MPoly(QtGui.QMainWindow):
             self.statBarMsg.setText(msg)
 
     def saveMask(self):
-        self.maskfilename = str(QtGui.QFileDialog.getSaveFileName(self, "Save Mask", self.datatable['SDIR']))
+        self.maskfilename = str(QtGui.QFileDialog.getSaveFileName(self, "Save Mask", self.datatable['SDIR'])[0])
         self._mask.save(self.maskfilename)
         #f = h5py.File(self.maskfilename,"w")
         #f['mask'] = self.getmask()#self.mask
@@ -314,11 +330,27 @@ class MPoly(QtGui.QMainWindow):
     def loadBlemish(self):
         '''Load the blemish file. Note you need to do this first as
         It will erase your mask.'''
-        blemfilename = str(QtGui.QFileDialog.getOpenFileName(self, "Open Blemish", self.datatable['SDIR'],'Blemish File (*blem*.hd5);;All Files (*)'))
-        f = h5py.File(blemfilename,"r")
-        self.blemish = np.array(f['mask'])
-        f.close()
-        self.mask = self.mask*self.blemish
+        self.blemfilename= str(QtGui.QFileDialog.getOpenFileName(self, "Open Blemish", self.datatable['SDIR'],'Mask File (*blem*.hd5 *blem*.tif *blem*.tiff);;All Files (*)')[0])
+        # TODO : add extension checking
+        blemfilename = self.blemfilename
+        if 'master.h5' in blemfilename:
+            f = h5py.File(blemfilename,"r")
+            self.blemish = np.array(f['mask'])
+            f.close()
+        elif 'tif' in blemfilename:
+            try:
+                #ddir = self.saxsdata.getelem("setup","DDIR")
+                self.blemish= np.array(Image.open(blemfilename))
+                if self.blemish.ndim == 3:
+                    self.blemish = (self.blemish[:,:,0] > 0).astype(int)
+            except IOError:
+                print("Error could not read file")
+                return False
+
+
+
+        #self.mask = self.mask*self.blemish
+        self._mask = Mask(mask=self.mask*self.blemish)
         self.mimg.setImage(self.mask,autoLevels=False,levels=[0,2])
 
     def sendMask(self):
