@@ -11,7 +11,7 @@ from tools.qphiavg import qphiavg
 
 from skbeam.core.roi import circular_average
 
-from tools.mask import openmask
+import tools.mask
 
 from gui.SAXSWidget import SAXSWidget
 from gui.Masking import MPoly
@@ -193,7 +193,7 @@ class SAXSGUI(QtGui.QMainWindow):
         # TODO : make general fucntion
         if self.avg_img is None:
             self.avg_img = np.ones((100,100))
-        self.maskprog = MPoly(self.avg_img.astype(float),mask=None)
+        self.maskprog = MPoly(self.avg_img.astype(float),mask=None, imgwidget=self.imgwidget)
 
     def circavg(self):
         self.imgwidget.circavg()
@@ -246,7 +246,7 @@ class SAXSGUI(QtGui.QMainWindow):
             self.imgwidget.redrawimg()
 
     def openmaskfile(self):
-        fname = QtGui.QFileDialog.getOpenFileName(self, 'Open Mask', self.getSDIR(),
+        fname, filetype = QtGui.QFileDialog.getOpenFileName(self, 'Open Mask', self.getSDIR(),
                             "Masks (*mask*.hd5 *tif *tiff);;Blemish Files (*blemish*.hd5);; All Files (*)")
         self.loadmaskfromfile(fname)
 
@@ -331,7 +331,7 @@ class SAXSGUI(QtGui.QMainWindow):
             mask_threshold = int(self.saxsdata.getelem("setup", "mask_threshold"))
             if mask_name.endswith("h5") or mask_name.endswith("hd5"):
                 # premask is mask, and mask is thresholded (useful when using a flatfield)
-                self.premask = openmask(mask_name)
+                self.premask = tools.mask.openmask(mask_name)
             elif mask_name.lower().endswith("tif") or mask_name.lower().endswith("tiff"):
                 # save two instances of mask
                 self.premask = np.array(Image.open(mask_name))
@@ -344,10 +344,15 @@ class SAXSGUI(QtGui.QMainWindow):
                 self.mask = (self.premask >= mask_threshold).astype(int)
             else:
                 self.mask = None
+            if hasattr(self, 'imgwidget'):
+                self.imgwidget.mask = self.mask
+
 
     def average_frames(self):
         if self.imgreader is not None:
             self.avg_img, self.Ivst = runningaverage(self.imgreader)
+            if self.mask is not None:
+                self.avg_img = self.avg_img
         else:
             print("Cannot average images, no images loaded")
 

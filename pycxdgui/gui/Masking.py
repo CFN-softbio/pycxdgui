@@ -14,7 +14,7 @@ from classes.Mask import Mask
 from gui.guitools import findLowHigh
 
 class MPoly(QtGui.QMainWindow):
-    def __init__(self, img, datatable=None, mask=None):
+    def __init__(self, img, datatable=None, mask=None, imgwidget=None):
         ''' Initialize the polygon for mask.
                 This object handles the graphics as well as the mask
                 creation (it might be a good idea to separate them later
@@ -33,6 +33,9 @@ class MPoly(QtGui.QMainWindow):
         # TODO : remove and add error checking
         if img is None:
             img = np.ones((100,100))
+        # pointer to imgwidget
+        self.imgwidget = imgwidget
+
         self.blemish = np.ones_like(img)
         self.setimgdata(img.astype(float))
         self.points = []
@@ -354,12 +357,12 @@ class MPoly(QtGui.QMainWindow):
         self.mimg.setImage(self.mask,autoLevels=False,levels=[0,2])
 
     def sendMask(self):
-        #self.xDset.mask = self.mask
-        pass
+        if self.imgwidget is not None:
+            self.imgwidget.mask = self._mask.mask
+        else:
+            print("Error, don't have a reference to image window, cannot send")
 
     def callExit(self):
-        #self.xDset.mask = self.mask
-        pass
         self.close()
 
     def mouseClickEvent(self,ev):

@@ -145,13 +145,14 @@ class SAXSWidget(QtGui.QWidget):
 
     def recomputemask(self):
         ''' recompute the mask '''
-        if hasattr(self.saxsdata, "premask") and self.saxsdata.premask is not None:
-            print("Recomputing mask")
-            mask_threshold = int(self.saxsdata.saxsdata.getelem("setup","mask_threshold"))
-            self.saxsdata.mask = (self.saxsdata.premask >= mask_threshold).astype(int)
-            self.mask_processed = self.regridimg(self.saxsdata.mask)
-        else:
-            self.mask_processed = None
+#        if hasattr(self.saxsdata, "premask") and self.saxsdata.premask is not None:
+#            print("Recomputing mask")
+#            mask_threshold = int(self.saxsdata.saxsdata.getelem("setup","mask_threshold"))
+#            self.saxsdata.mask = (self.saxsdata.premask >= mask_threshold).astype(int)
+#            self.mask_processed = self.regridimg(self.saxsdata.mask)
+#        else:
+#            self.mask_processed = None
+        self.mask_processed = self.mask
 
     def redrawimg(self):
         ''' Redraw the image, only if the avg_img exists in saxsdata.'''
