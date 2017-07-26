@@ -218,7 +218,10 @@ class SAXSWidget(QtGui.QWidget):
         self.saxsdata.saxsdata.getelem("circavg","noqs")
         print("Computing circular average")
         print("qmap size {}".format(q_map.shape))
-        print("mask size {}".format(mask.shape))
+        if mask is not None:
+            print("mask size {}".format(mask.shape))
+        else:
+            print("Not using mask")
         print("img size {}".format(self.saxsdata.avg_img.shape))
         sqx, sqy, sqxerr, sqyerr = circavg2(self.saxsdata.avg_img, q_map=q_map,
                                             r_map=r_map, mask=mask)

@@ -35,6 +35,8 @@ class MPoly(QtGui.QMainWindow):
             img = np.ones((100,100))
         # pointer to imgwidget
         self.imgwidget = imgwidget
+        if self.imgwidget is None:
+            print("warning imgwidget reference not set. mask cannot be sent")
 
         self.blemish = np.ones_like(img)
         self.setimgdata(img.astype(float))
