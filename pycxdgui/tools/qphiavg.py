@@ -111,18 +111,24 @@ def qphiavg_getvals(img,x0=None,y0=None,mask=None,SIMG=None,qlist=None,philist=N
     return qvals, phivals
 
 def qphiavg(img,x0=None,y0=None,mask=None,SIMG=None,qlist=None,philist=None,noqs=None,nophis=None,interp=None):
-    ''' Compute a qphi average of the data. 
+    ''' Compute a qphi average of the data.
         x0 : x center
         y0 : y center
         mask : the mask
         If SIMG is not null, put the data into this image.
-        noqs : the number of qs to partition into. Default is 
+        noqs : the number of qs to partition into. Default is
             the number of pixels approximately.
         interp : interpolation methods:
             None (default) : no interpolation
             1 : interpolate in phi only (loop over q's)
             ... so far no other methods
     '''
+    if mask is not None:
+        if img.shape != mask.shape:
+            errormsg = "Error, image and mask not same shape\n"
+            errormsg += "Image shape : {}".format(img.shape)
+            errormsg += "Mask shape : {}".format(mask.shape)
+            raise ValueError(errormsg)
     dimy, dimx = img.shape
     if(mask is None):
         pxlst = np.arange(dimx*dimy)
@@ -155,12 +161,11 @@ def qphiavg(img,x0=None,y0=None,mask=None,SIMG=None,qlist=None,philist=None,noqs
     else:
         philist_m1 = np.array(philist)
         nophis = philist_m1.shape[0]//2
-    
+
     QS,PHIS = mkpolar(img,x0=x0,y0=y0)
-    qs,phis = QS.ravel()[pxlst],PHIS.ravel()[pxlst]
+    qs,phis = QS.ravel()[pxlst], PHIS.ravel()[pxlst]
 
     data = img.ravel()[pxlst]
-    
     if(noqs is None):
         noqs = (np.max(qs)-np.min(qs))
     if(nophis is None):

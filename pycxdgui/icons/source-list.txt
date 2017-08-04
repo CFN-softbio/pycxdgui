@@ -1,0 +1,12 @@
+The icons were taken from the following URL sources.
+See the README.md for credits.
+These images were listed to be free of use. If this is not correct for any of
+these images are they are infringing copyright, please contact the author:
+jrmlhermitte@gmail.com and he will gladly remove them. Unlisted icons were
+created by the author and are subject to the same license as the source code.
+
+load_image_icon.jpg : http://www.freepik.com/free-icon/picture-frame-with-mountain-image_748687.htm
+
+load_mask_icon.jpg : http://www.freepik.com/free-icon/anonymous-logo_768394.htm
+
+exit_icon.jpg : http://www.freepik.com/free-icon/exit-door-sign_741592.htm

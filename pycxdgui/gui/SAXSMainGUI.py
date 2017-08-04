@@ -2,25 +2,25 @@ from detector.eiger import EigerImages
 from PIL import Image
 #from tifffile import TiffFile
 
-from tools.average import runningaverage
-from tools.mask import openmask
+from ..tools.average import runningaverage
+from ..tools.mask import openmask
 #from tools.SAXS import SAXSObj
 #to read descriptor files
-from tools.circavg import circavg
-from tools.qphiavg import qphiavg
+from ..tools.circavg import circavg
+from ..tools.qphiavg import qphiavg
 
 from skbeam.core.roi import circular_average
 
-import tools.mask
+from ..tools import mask as tools_mask
 
-from gui.SAXSWidget import SAXSWidget
-from gui.Masking import MPoly
-from gui.SAXSDataModel import SAXSDataModel
+from .SAXSWidget import SAXSWidget
+from .Masking import MPoly
+from .SAXSDataModel import SAXSDataModel
 
-from gui.DataTree import SAXSDataTree
+from .DataTree import SAXSDataTree
 
-from gui.colormaps import makeALBULACmap
-from gui.FileListener import FileListener
+from .colormaps import makeALBULACmap
+from .FileListener import FileListener
 
 import pyqtgraph as pg
 from PyQt5 import QtGui, QtWidgets
@@ -62,7 +62,7 @@ class SAXSGUI(QtGui.QMainWindow):
             window which will have its own layout.'''
 
     # metaclassed, needs to be here
-    signal_imageupdated = pyqtSignal()#name="imageupdated()")
+    signal_imageupdated = pyqtSignal()
 
     def __init__(self, configfile=None, verbose=False):
         ''' This starts the SAXS GUI.'''
@@ -108,33 +108,33 @@ class SAXSGUI(QtGui.QMainWindow):
         menubar = self.menuBar()
 
         # icon, shortcut, description, action (function)
-        loadEAction = self.mkAction('icons/loadE.png', '&Open Image File',
+        loadEAction = self.mkAction('icons/load_image_icon.jpg', '&Open Image File',
                                     None, 'Open Image File', self.openmasterfile)
-        loadMAction = self.mkAction('icons/loadM.png', '&Open Mask File',
+        loadMAction = self.mkAction('icons/load_mask_icon.jpg', '&Open Mask File',
                                     None, 'Open Mask File', self.openmaskfile)
-        exitAction = self.mkAction('icons/quit.png', '&Exit', 'Ctrl+W',
-                                   'Exit Application', QtWidgets.qApp.quit)
         maskAction = self.mkAction('icons/mpolyicon.png', '&Make Mask',
                                    None, 'Make new mask', self.startmasking)
-        dataTableAction = self.mkAction('icons/datatable.png', 'View Data Table',
+        dataTableAction = self.mkAction('icons/datatable_icon.png', 'View Data Table',
                                    None, 'View Data Table', self.showDataTable)
-        circAvgAction = self.mkAction('icons/circavg.png', 'Plot &Circular Average',
+        circAvgAction = self.mkAction('icons/circavg_icon.png', 'Plot &Circular Average',
                                    None, 'Plot Circular Average', self.circavg)
-        sqphiAction = self.mkAction('icons/sqphi.png', 'Plot Qphi Map',
+        sqphiAction = self.mkAction('icons/sqphi_icon.png', 'Plot Qphi Map',
                                    None, 'Plot QPhi Map', self.qphimap)
         deltaphicorrAction = self.mkAction('icons/deltaphicorr.png', 'Plot Delta Phi Corr Map',
                                    None, 'Plot Delta Phi Corr Map', self.deltaphicorr)
-        listenToggleAction = self.mkAction('icons/listen.png', 'Toggle listen',
+        listenToggleAction = self.mkAction('icons/listen_icon.png', 'Toggle listen',
                                    None, 'Toggle listen', self.toggle_listen_for_newfiles)
 
-        aspectToggleAction = self.mkAction('icons/aspect.png', 'Lock/Unlock Aspect Ratio', 
+        aspectToggleAction = self.mkAction('icons/lock_aspect_icon.png', 'Lock/Unlock Aspect Ratio',
                                    None, 'Lock/Unlock Aspect Ratio', self.toggle_aspect)
+
+        exitAction = self.mkAction('icons/exit_icon.png', '&Exit', 'Ctrl+W',
+                                   'Exit Application', QtWidgets.qApp.quit)
 
         # menu bar
         filemenu = menubar.addMenu('&File')
         filemenu.addAction(loadEAction)
         filemenu.addAction(loadMAction)
-        filemenu.addAction(exitAction)
         filemenu.addAction(maskAction)
         filemenu.addAction(dataTableAction)
         filemenu.addAction(circAvgAction)
@@ -142,12 +142,12 @@ class SAXSGUI(QtGui.QMainWindow):
         filemenu.addAction(deltaphicorrAction)
         filemenu.addAction(listenToggleAction)
         filemenu.addAction(aspectToggleAction)
+        filemenu.addAction(exitAction)
 
         # tool bar
         self.toolbar = self.addToolBar("Quick access")
         self.toolbar.addAction(loadEAction)
         self.toolbar.addAction(loadMAction)
-        self.toolbar.addAction(exitAction)
         self.toolbar.addAction(maskAction)
         self.toolbar.addAction(dataTableAction)
         self.toolbar.addAction(circAvgAction)
@@ -155,6 +155,7 @@ class SAXSGUI(QtGui.QMainWindow):
         self.toolbar.addAction(deltaphicorrAction)
         self.toolbar.addAction(listenToggleAction)
         self.toolbar.addAction(aspectToggleAction)
+        self.toolbar.addAction(exitAction)
 
         self.setWindowTitle("SAXS Data Visualizor")
 
@@ -176,6 +177,7 @@ class SAXSGUI(QtGui.QMainWindow):
     def showDataTable(self):
         ''' Show the data table'''
         pass
+        # TODO :reimplement
         #self.saxsdata = SAXSDataTree()
         #self.datatableview = QtGui.QTableView()
         #self.datatablemodel = SAXSDataModel(self.saxsobj)
@@ -190,7 +192,7 @@ class SAXSGUI(QtGui.QMainWindow):
             mask = None
         else:
             mask = self.mask.astype(float)
-        # TODO : make general fucntion
+        # TODO : make general function
         if self.avg_img is None:
             self.avg_img = np.ones((100,100))
         self.maskprog = MPoly(self.avg_img.astype(float),mask=None, imgwidget=self.imgwidget)
@@ -244,7 +246,7 @@ class SAXSGUI(QtGui.QMainWindow):
             self.average_frames()
             print("done")
             self.imgwidget.redrawimg()
-
+ 
     def openmaskfile(self):
         fname, filetype = QtGui.QFileDialog.getOpenFileName(self, 'Open Mask', self.getSDIR(),
                             "Masks (*mask*.hd5 *tif *tiff);;Blemish Files (*blemish*.hd5);; All Files (*)")
@@ -277,6 +279,7 @@ class SAXSGUI(QtGui.QMainWindow):
             If filename is specified, then the object will be updated
             with this filename.
             '''
+        # update the table
         if filename is None:
             filename = self.saxsdata.getelem("setup","filename")
         else:
@@ -331,7 +334,7 @@ class SAXSGUI(QtGui.QMainWindow):
             mask_threshold = int(self.saxsdata.getelem("setup", "mask_threshold"))
             if mask_name.endswith("h5") or mask_name.endswith("hd5"):
                 # premask is mask, and mask is thresholded (useful when using a flatfield)
-                self.premask = tools.mask.openmask(mask_name)
+                self.premask = tools_mask.openmask(mask_name)
             elif mask_name.lower().endswith("tif") or mask_name.lower().endswith("tiff"):
                 # save two instances of mask
                 self.premask = np.array(Image.open(mask_name))

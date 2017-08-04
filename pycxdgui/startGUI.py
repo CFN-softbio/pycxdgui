@@ -1,5 +1,5 @@
 from PyQt5 import QtGui
-from gui.SAXSMainGUI import SAXSGUI
+from pycxdgui.gui.SAXSMainGUI import SAXSGUI
 import sys
 
 ''' The GUI for reading images and some simple analysis
