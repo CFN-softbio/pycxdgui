@@ -9,9 +9,9 @@ import os
 
 from PIL import Image
 
-from classes.Mask import Mask
+from ..classes.Mask import Mask
 
-from gui.guitools import findLowHigh
+from .guitools import findLowHigh
 
 class MPoly(QtGui.QMainWindow):
     def __init__(self, img, datatable=None, mask=None, imgwidget=None):
