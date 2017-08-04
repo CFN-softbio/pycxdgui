@@ -144,7 +144,7 @@ class SAXSGUI(QtGui.QMainWindow):
         filemenu.addAction(aspectToggleAction)
 
         # tool bar
-        self.toolbar = self.addToolBar("EIGER quick access")
+        self.toolbar = self.addToolBar("Quick access")
         self.toolbar.addAction(loadEAction)
         self.toolbar.addAction(loadMAction)
         self.toolbar.addAction(exitAction)
@@ -156,7 +156,7 @@ class SAXSGUI(QtGui.QMainWindow):
         self.toolbar.addAction(listenToggleAction)
         self.toolbar.addAction(aspectToggleAction)
 
-        self.setWindowTitle("EIGER Data Visualizor")
+        self.setWindowTitle("SAXS Data Visualizor")
 
         #self.showDataTable()
 
