@@ -29,8 +29,7 @@ from PyQt5.QtCore import pyqtSignal
 import numpy as np
 
 # import the reader registry
-from ..readers import reader_reg
-from ..tools.file_filters import make_file_filters
+from ..readers import reader_registry
 
 
 
@@ -131,7 +130,7 @@ class SAXSGUI(QtGui.QMainWindow):
         sqphiAction = self.mkAction('icons/sqphi_icon.png',
                                     'Plot Qphi Map',
                                     None, 'Plot QPhi Map', self.qphimap)
-        deltaphicorrAction = self.mkAction('icons/deltaphicorr.png',
+        deltaphicorrAction = self.mkAction('icons/deltaphicorr_icon.png',
                                            'Plot Delta Phi Corr Map',
                                            None, 'Plot Delta Phi Corr Map',
                                            self.deltaphicorr)
@@ -188,8 +187,10 @@ class SAXSGUI(QtGui.QMainWindow):
         self.show()
 
     def toggle_aspect(self):
+        print("Toggling aspect ratio lock")
         self._aspectlock = not self._aspectlock
         self.imgwidget.setAspectLock(self._aspectlock)
+        print("Aspect ratio lock is now {}".format(self._aspectlock))
 
     def showDataTable(self):
         ''' Show the data table'''
@@ -245,7 +246,7 @@ class SAXSGUI(QtGui.QMainWindow):
         filt_string = ""
         extension = self.saxsdata.getelem("setup", "extension")
 
-        filt_string = reader_reg.file_filters(extension=extension)
+        filt_string = reader_registry.get_file_filters(extension=extension)
 
         filename, filetype = QtGui.QFileDialog.\
             getOpenFileName(self, 'Open data file',
@@ -303,10 +304,14 @@ class SAXSGUI(QtGui.QMainWindow):
             self.saxsdata.setelem("setup", "filename", filename)
 
         if filename is not None:
-            self.imgreader = ImageReader(filename)
+            try:
+                self.imgreader = reader_registry(filename)
+                self.signal_imageupdated.emit()
+                return True
+            except FileNotFoundError:
+                print("Error, file not found, image reader not set")
+                return False
 
-        self.signal_imageupdated.emit()
-        return True
 
     def reprocess_and_draw(self):
         self.average_frames()

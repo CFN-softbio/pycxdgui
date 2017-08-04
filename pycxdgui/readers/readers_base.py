@@ -31,9 +31,8 @@ class ReaderRegistry:
         dict. Useful for making file extension filters.'''
         return group_items(self.extension_dict)
 
-    @property
-    def file_filters(self, extension=None):
-        return make_file_filters(self.reader_dict, extension=extension)
+    def get_file_filters(self, extension=None):
+        return make_file_filters(self.extension_dict, extension=extension)
 
     def register(self, key, reader):
         if key in self.extension_dict:
@@ -65,6 +64,7 @@ class ReaderRegistry:
             object to use to open a file, and calls the respective reader.
             '''
         reader = self._get_reader_from_filename(filename)
+
         return reader(filename)
 
     def __call__(self, filename):
@@ -76,7 +76,7 @@ def make_file_filters(extension_dict, extension=None):
         from a reader registry reader_reg.
         If extension is set, this will try to make that extension come first
     '''
-    filter_groups= group_items(extension_dict).copy()
+    filter_groups = group_items(extension_dict).copy()
     filter_string = ""
     first = True
 

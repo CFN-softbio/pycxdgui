@@ -2,6 +2,7 @@ from PyQt5 import QtGui
 from pycxdgui.gui.SAXSMainGUI import SAXSGUI
 import sys
 
+
 ''' The GUI for reading images and some simple analysis
     Note: The xcoordinate is taken to be the fastest varying dimension (rightermost)
         Since pyqt rather takes x to be the other way, I need to transpose everything
