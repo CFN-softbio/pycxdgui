@@ -108,23 +108,23 @@ class SAXSGUI(QtGui.QMainWindow):
         menubar = self.menuBar()
 
         # icon, shortcut, description, action (function)
-        loadEAction = self.mkAction('icons/loadE.png', '&Open EIGER File', 
-                                    None, 'Open EIGER File', self.openmasterfile)
-        loadMAction = self.mkAction('icons/loadM.png', '&Open Mask File', 
+        loadEAction = self.mkAction('icons/loadE.png', '&Open Image File',
+                                    None, 'Open Image File', self.openmasterfile)
+        loadMAction = self.mkAction('icons/loadM.png', '&Open Mask File',
                                     None, 'Open Mask File', self.openmaskfile)
-        exitAction = self.mkAction('icons/quit.png', '&Exit', 'Ctrl+W', 
+        exitAction = self.mkAction('icons/quit.png', '&Exit', 'Ctrl+W',
                                    'Exit Application', QtWidgets.qApp.quit)
-        maskAction = self.mkAction('icons/mpolyicon.png', '&Make Mask', 
+        maskAction = self.mkAction('icons/mpolyicon.png', '&Make Mask',
                                    None, 'Make new mask', self.startmasking)
-        dataTableAction = self.mkAction('icons/datatable.png', 'View Data Table', 
+        dataTableAction = self.mkAction('icons/datatable.png', 'View Data Table',
                                    None, 'View Data Table', self.showDataTable)
-        circAvgAction = self.mkAction('icons/circavg.png', 'Plot &Circular Average', 
+        circAvgAction = self.mkAction('icons/circavg.png', 'Plot &Circular Average',
                                    None, 'Plot Circular Average', self.circavg)
-        sqphiAction = self.mkAction('icons/sqphi.png', 'Plot Qphi Map', 
+        sqphiAction = self.mkAction('icons/sqphi.png', 'Plot Qphi Map',
                                    None, 'Plot QPhi Map', self.qphimap)
-        deltaphicorrAction = self.mkAction('icons/deltaphicorr.png', 'Plot Delta Phi Corr Map', 
+        deltaphicorrAction = self.mkAction('icons/deltaphicorr.png', 'Plot Delta Phi Corr Map',
                                    None, 'Plot Delta Phi Corr Map', self.deltaphicorr)
-        listenToggleAction = self.mkAction('icons/listen.png', 'Toggle listen', 
+        listenToggleAction = self.mkAction('icons/listen.png', 'Toggle listen',
                                    None, 'Toggle listen', self.toggle_listen_for_newfiles)
 
         aspectToggleAction = self.mkAction('icons/aspect.png', 'Lock/Unlock Aspect Ratio', 
