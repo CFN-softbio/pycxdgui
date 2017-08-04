@@ -1,8 +1,8 @@
 import pyqtgraph as pg
 from PyQt5 import QtGui
-from gui.guitools import findLowHigh
+from .guitools import findLowHigh
 
-from gui.colormaps import makeALBULACmap
+from .colormaps import makeALBULACmap
 
 class ImageMainWindow(QtGui.QMainWindow):
     ''' This is a window on its own'''

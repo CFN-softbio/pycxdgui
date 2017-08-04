@@ -1,41 +1,41 @@
-from detector.eiger import EigerImages
 from PIL import Image
-#from tifffile import TiffFile
+# from tifffile import TiffFile
 
 from ..tools.average import runningaverage
-from ..tools.mask import openmask
-#from tools.SAXS import SAXSObj
-#to read descriptor files
+# from ..tools.mask import openmask
+# from tools.SAXS import SAXSObj
+# to read descriptor files
 from ..tools.circavg import circavg
-from ..tools.qphiavg import qphiavg
+# from ..tools.qphiavg import qphiavg
 
-from skbeam.core.roi import circular_average
+# from skbeam.core.roi import circular_average
 
 from ..tools import mask as tools_mask
 
 from .SAXSWidget import SAXSWidget
 from .Masking import MPoly
-from .SAXSDataModel import SAXSDataModel
+# from .SAXSDataModel import SAXSDataModel
 
 from .DataTree import SAXSDataTree
 
-from .colormaps import makeALBULACmap
+# from .colormaps import makeALBULACmap
 from .FileListener import FileListener
 
-import pyqtgraph as pg
+# import pyqtgraph as pg
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
-from PyQt5 import QtCore
+# from PyQt5 import QtCore
 
-import os
-import os.path
-
-import pandas as pd
 import numpy as np
+
+# import the reader registry
+from ..readers import reader_reg
+from ..tools.file_filters import make_file_filters
+
 
 
 # some hard coded values
-MAXCTS = 65535 # for proper image color scale display, ignore high values
+MAXCTS = 65535  # for proper image color scale display, ignore high values
 
 ''' Structure of GUI:
     The main GUI has buttons which each call separate widgets that perform
@@ -51,16 +51,16 @@ MAXCTS = 65535 # for proper image color scale display, ignore high values
 
 # the different extensions accepted
 _file_filters = {
-        '.tif' : 'tif File (*.tif *tiff)',
-        'master.h5' : 'EigerImage File (*master.h5)',
-        'all' : 'All Files (*)'
+        '.tif': 'tif File (*.tif *tiff)',
+        'master.h5': 'EigerImage File (*master.h5)',
+        'all': 'All Files (*)'
         }
+
 
 class SAXSGUI(QtGui.QMainWindow):
     ''' Uses QMainWindow, has builtin features like menu bar, toolbars
             and dockable toolbars. I will add a central widget to the
             window which will have its own layout.'''
-
     # metaclassed, needs to be here
     signal_imageupdated = pyqtSignal()
 
@@ -83,12 +83,12 @@ class SAXSGUI(QtGui.QMainWindow):
 
         self.verbose = verbose
 
-        self.numentries = 0 # number of data entries analyzed here
-        wait_time = float(self.saxsdata.getelem("setup","wait_time"))
+        self.numentries = 0  # number of data entries analyzed here
+        wait_time = float(self.saxsdata.getelem("setup", "wait_time"))
 
         # start a file listener using the specified data directory
-        ddir = self.saxsdata.getelem("setup","DDIR")
-        extension = self.saxsdata.getelem("setup","extension")
+        ddir = self.saxsdata.getelem("setup", "DDIR")
+        extension = self.saxsdata.getelem("setup", "extension")
         self.filelistener = FileListener(wait_time=wait_time)
         self.filelistener.listen_for_files(ddir, extension)
 
@@ -103,30 +103,47 @@ class SAXSGUI(QtGui.QMainWindow):
         ''' Initialize the user interface.
             Initializes the main window.
         '''
-        self.setGeometry(300,200,1200,800)
+        self.setGeometry(300, 200, 1200, 800)
         self.statusBar().showMessage('Ready')
         menubar = self.menuBar()
 
         # icon, shortcut, description, action (function)
-        loadEAction = self.mkAction('icons/load_image_icon.jpg', '&Open Image File',
-                                    None, 'Open Image File', self.openmasterfile)
-        loadMAction = self.mkAction('icons/load_mask_icon.jpg', '&Open Mask File',
-                                    None, 'Open Mask File', self.openmaskfile)
-        maskAction = self.mkAction('icons/mpolyicon.png', '&Make Mask',
-                                   None, 'Make new mask', self.startmasking)
-        dataTableAction = self.mkAction('icons/datatable_icon.png', 'View Data Table',
-                                   None, 'View Data Table', self.showDataTable)
-        circAvgAction = self.mkAction('icons/circavg_icon.png', 'Plot &Circular Average',
-                                   None, 'Plot Circular Average', self.circavg)
-        sqphiAction = self.mkAction('icons/sqphi_icon.png', 'Plot Qphi Map',
-                                   None, 'Plot QPhi Map', self.qphimap)
-        deltaphicorrAction = self.mkAction('icons/deltaphicorr.png', 'Plot Delta Phi Corr Map',
-                                   None, 'Plot Delta Phi Corr Map', self.deltaphicorr)
-        listenToggleAction = self.mkAction('icons/listen_icon.png', 'Toggle listen',
-                                   None, 'Toggle listen', self.toggle_listen_for_newfiles)
+        loadEAction = self.mkAction('icons/load_image_icon.jpg',
+                                    '&Open Image File',
+                                    None, 'Open Image File',
+                                    self.openmasterfile)
+        loadMAction = self.mkAction('icons/load_mask_icon.jpg',
+                                    '&Open Mask File',
+                                    None, 'Open Mask File',
+                                    self.openmaskfile)
+        maskAction = self.mkAction('icons/mpolyicon.png',
+                                   '&Make Mask', None,
+                                   'Make new mask',
+                                   self.startmasking)
+        dataTableAction = self.mkAction('icons/datatable_icon.png',
+                                        'View Data Table',
+                                        None, 'View Data Table',
+                                        self.showDataTable)
+        circAvgAction = self.mkAction('icons/circavg_icon.png',
+                                      'Plot &Circular Average',
+                                      None, 'Plot Circular Average',
+                                      self.circavg)
+        sqphiAction = self.mkAction('icons/sqphi_icon.png',
+                                    'Plot Qphi Map',
+                                    None, 'Plot QPhi Map', self.qphimap)
+        deltaphicorrAction = self.mkAction('icons/deltaphicorr.png',
+                                           'Plot Delta Phi Corr Map',
+                                           None, 'Plot Delta Phi Corr Map',
+                                           self.deltaphicorr)
+        listenToggleAction = self.mkAction('icons/listen_icon.png',
+                                           'Toggle listen', None,
+                                           'Toggle listen',
+                                           self.toggle_listen_for_newfiles)
 
-        aspectToggleAction = self.mkAction('icons/lock_aspect_icon.png', 'Lock/Unlock Aspect Ratio',
-                                   None, 'Lock/Unlock Aspect Ratio', self.toggle_aspect)
+        aspectToggleAction = self.mkAction('icons/lock_aspect_icon.png',
+                                           'Lock/Unlock Aspect Ratio', None,
+                                           'Lock/Unlock Aspect Ratio',
+                                           self.toggle_aspect)
 
         exitAction = self.mkAction('icons/exit_icon.png', '&Exit', 'Ctrl+W',
                                    'Exit Application', QtWidgets.qApp.quit)
@@ -159,9 +176,9 @@ class SAXSGUI(QtGui.QMainWindow):
 
         self.setWindowTitle("SAXS Data Visualizor")
 
-        #self.showDataTable()
+        # self.showDataTable()
 
-        self.imgwidget = SAXSWidget(self) #spawns the ui for the image etc
+        self.imgwidget = SAXSWidget(self)  # spawns the ui for the image etc
         self._aspectlock = True
         self.imgwidget.setAspectLock(self._aspectlock)
         self.setCentralWidget(self.imgwidget)
@@ -178,14 +195,14 @@ class SAXSGUI(QtGui.QMainWindow):
         ''' Show the data table'''
         pass
         # TODO :reimplement
-        #self.saxsdata = SAXSDataTree()
-        #self.datatableview = QtGui.QTableView()
-        #self.datatablemodel = SAXSDataModel(self.saxsobj)
+        # self.saxsdata = SAXSDataTree()
+        # self.datatableview = QtGui.QTableView()
+        # self.datatablemodel = SAXSDataModel(self.saxsobj)
 
-        #self.datatableview.setModel(self.datatablemodel)
+        # self.datatableview.setModel(self.datatablemodel)
 
-        #self.datatableview.setGeometry(600,400,600,600)
-        #self.datatableview.show()
+        # self.datatableview.setGeometry(600,400,600,600)
+        # self.datatableview.show()
 
     def startmasking(self):
         if self.mask is None:
@@ -194,8 +211,9 @@ class SAXSGUI(QtGui.QMainWindow):
             mask = self.mask.astype(float)
         # TODO : make general function
         if self.avg_img is None:
-            self.avg_img = np.ones((100,100))
-        self.maskprog = MPoly(self.avg_img.astype(float),mask=None, imgwidget=self.imgwidget)
+            self.avg_img = np.ones((100, 100))
+        self.maskprog = MPoly(self.avg_img.astype(float),
+                              mask=mask, imgwidget=self.imgwidget)
 
     def circavg(self):
         self.imgwidget.circavg()
@@ -220,36 +238,33 @@ class SAXSGUI(QtGui.QMainWindow):
             myAction.triggered.connect(action)
         return myAction
 
+
     def openmasterfile(self):
         file_filters = _file_filters.copy()
         # re order filters to have chosen extension first
         filt_string = ""
         extension = self.saxsdata.getelem("setup", "extension")
-        # now make filters string (could be sep function)
-        first = True
-        if extension in file_filters:
-            filt_string = filt_string + file_filters.pop(extension)
-            first = False
 
-        for key in file_filters:
-            if first:
-                first = False
-            else:
-                filt_string = filt_string + ";;"
-            filt_string = filt_string + file_filters[key]
+        filt_string = reader_reg.file_filters(extension=extension)
 
-        filename, filetype = QtGui.QFileDialog.getOpenFileName(self, 'Open data file', self.getDDIR(), filt_string)
+        filename, filetype = QtGui.QFileDialog.\
+            getOpenFileName(self, 'Open data file',
+                            self.getDDIR(), filt_string)
+
         if(len(filename)):
             print("opening file {}".format(filename))
             self.load_img(filename=filename)
-            print("Computing a running average of the images ({} images)...".format(len(self.imgreader)))
+            print("Computing a running average of the images ({} images)..."
+                  .format(len(self.imgreader)))
             self.average_frames()
             print("done")
             self.imgwidget.redrawimg()
- 
+
     def openmaskfile(self):
-        fname, filetype = QtGui.QFileDialog.getOpenFileName(self, 'Open Mask', self.getSDIR(),
-                            "Masks (*mask*.hd5 *tif *tiff);;Blemish Files (*blemish*.hd5);; All Files (*)")
+        fname, filetype = QtGui.QFileDialog.\
+            getOpenFileName(self, 'Open Mask', self.getSDIR(),
+                            "Masks (*mask*.hd5 *tif *tiff);;" +
+                            "Blemish Files (*blemish*.hd5);; All Files (*)")
         self.loadmaskfromfile(fname)
 
     def loadmaskfromfile(self, fname):
@@ -261,10 +276,11 @@ class SAXSGUI(QtGui.QMainWindow):
 
     def toggle_listen_for_newfiles(self):
         if self.listen_for_newfiles is False:
-            #reset (should access memeber functions need to check threading)
+            # reset (should access memeber functions need to check threading)
             self.filelistener.curfilename = None
         self.listen_for_newfiles = not self.listen_for_newfiles
-        print("Toggled the file listening, listening is now {}".format(self.listen_for_newfiles))
+        print("Toggled the file listening, listening is now {}"
+              .format(self.listen_for_newfiles))
 
     def load_newfile(self, filename):
         ''' Wrapper to load new file only if listen is on.'''
@@ -281,38 +297,13 @@ class SAXSGUI(QtGui.QMainWindow):
             '''
         # update the table
         if filename is None:
-            filename = self.saxsdata.getelem("setup","filename")
+            filename = self.saxsdata.getelem("setup", "filename")
         else:
             # the store new name in object
-            self.saxsdata.setelem("setup","filename",filename)
+            self.saxsdata.setelem("setup", "filename", filename)
 
         if filename is not None:
-            if "master.h5" in filename:#.endswith("master.h5"):
-                try:
-                    #ddir = self.saxsdata.getelem("setup","DDIR")
-                    self.imgreader = EigerImages(filename)
-                except IOError:
-                    print("Error could not read file")
-                    return False
-            elif "tif" in filename or "tiff" in filename:
-                try:
-                    #ddir = self.saxsdata.getelem("setup","DDIR")
-                    self.imgreader = np.array(Image.open(filename))
-                    #self.imgreader = TiffFile(filename).asarray()
-                    if len(self.imgreader.shape) == 3:
-                        self.imgreader = np.average(self.imgreader,axis=2)
-                    # then make 3D t series (of one image)
-                    self.imgreader = np.array([self.imgreader])
-                except IOError:
-                    print("Error could not read file")
-                    return False
-            else:
-                print("Error, could not read image {} with known extensions (master.h5 or tif supported)".format(filename))
-                self.imgreader = None
-                return False
-        else:
-            print("Did not load any images. Make sure filename and parent directory DDIR are set: {}".format(filename))
-            return False
+            self.imgreader = ImageReader(filename)
 
         self.signal_imageupdated.emit()
         return True

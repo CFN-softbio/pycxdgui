@@ -8,10 +8,10 @@
         thought/interaction)
 '''
 import numpy as np
-from tools.coordinates import mkpolar
-from tools.partitions import linplist, partition1D, partition2D
-from tools.partitions import partition_avg, partition_sum
-from tools.interpolations import fillin1d
+from .coordinates import mkpolar
+from .partitions import linplist, partition1D, partition2D
+from .partitions import partition_avg, partition_sum
+from .interpolations import fillin1d
 
 def circavg(img,x0=None,y0=None,mask=None,SIMG=None,noqs=None,xrdata=None):
     ''' Compute a circular average of the data. 

@@ -1,5 +1,5 @@
 import numpy as np
-from tools.partitions import partition2D, partition_avg, linplist
+from .partitions import partition2D, partition_avg, linplist
 ''' This module deals with 2D coordinate transformations. So far, we only have:
     - x,y (in pixels)
     - q, phi (in pixels, rads)

@@ -1,22 +1,22 @@
 from PyQt5 import QtGui, QtCore
 
 import pyqtgraph as pg
-from tools.smooth import smooth2Dgauss
-from tools.circavg2 import circavg2
-from gui.ImageWindow import ImageWindow, ImageMainWindow
+from ..tools.smooth import smooth2Dgauss
+from ..tools.circavg2 import circavg2
+from .ImageWindow import ImageWindow, ImageMainWindow
 
 import numpy as np
-from gui.colormaps import makeALBULACmap
+from .colormaps import makeALBULACmap
 
-from gui.guitools import findLowHigh
+from .guitools import findLowHigh
 
-from tools.circavg import circavg
-from tools.qphiavg import qphiavg
-from tools.qphicorr import deltaphicorr, deltaphicorr_qphivals, normsqcphi
+from ..tools.circavg import circavg
+from ..tools.qphiavg import qphiavg
+from ..tools.qphicorr import deltaphicorr, deltaphicorr_qphivals, normsqcphi
 
-from gui.ImageAnalWindow import ImageAnalWindow
+from .ImageAnalWindow import ImageAnalWindow
 
-from gui.DataTree import calibration_from_datatree
+from .DataTree import calibration_from_datatree
 
 
 def mouseMoved(ev):

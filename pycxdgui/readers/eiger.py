@@ -18,16 +18,17 @@ import h5py
 from pims import FramesSequence, Frame
 
 class EigerImages(FramesSequence):
-    pattern = re.compile('(.*)master.*')    
+    description = "Eiger Image"
+    pattern = re.compile('(.*)master.*')
     def __init__(self, master_filepath,imgthresh=None):
         # The 'master' file points to data in other files.
         # Construct a list of those filepaths and check that they exist.
         self.master_filepath = master_filepath
         self.imgthresh = imgthresh
-        
+
         ndatafiles = 0
         m = self.pattern.match(os.path.basename(master_filepath))
-        
+
         if m is None:
             raise ValueError("This reader expects filenames containing "
                              "the word 'master'. If the file was renamed, "
@@ -35,11 +36,11 @@ class EigerImages(FramesSequence):
                              "detector.")
         prefix = m.group(1)
         pattern_data =  prefix + 'data'
-        head, base = os.path.split( master_filepath )        
+        head, base = os.path.split( master_filepath )
         for files in os.listdir(head):
             if pattern_data in  files:
                 ndatafiles +=1
-        
+
         with h5py.File(master_filepath,"r") as f:
             try:
                 entry = f['entry']['data']  # Eiger firmware v1.3.0 and onwards
@@ -109,8 +110,6 @@ class EigerImages(FramesSequence):
             img *= (img < self.imgthresh)
         return Frame(img, frame_no=i)
 
-    #def get_avg(self,frms=None):
-
     def get_flatfield(self):
         '''EIGER specific routine to obtain the flatfield correction.'''
         f = h5py.File(self.master_filepath,"r")
@@ -137,3 +136,6 @@ class EigerImages(FramesSequence):
     @property
     def pixel_type(self):
         return self[0].dtype
+
+    def to_array(self):
+        return np.array(self)
