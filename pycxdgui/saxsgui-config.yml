@@ -1,0 +1,40 @@
+# yaml file for configuration
+# this is conventional yaml format:
+# http://www.yaml.org/start.html
+# comment out rows you don't want
+setup:
+    # default extension to look for
+    extension: ".tiff"
+    # the parent directory
+    DDIR: "." 
+    # the storage directory
+    SDIR: "."
+    # beam center
+    xcen: 258
+    ycen: 336
+    # wait time for file listening
+    wait_time: .1
+    # the initial mask name
+    mask_name: "test.tiff"
+    # the values that define masked and unmasked region >=
+    mask_threshold: 1
+    # sample detector distance
+    rdet: 5
+    energy: 9.646  # in keV
+    wavelength: 1.285299  # in angstroms
+    dpix: 172 # pixel size in um
+    # first filename to load
+    filename: "/media/xray/NSLSII_Data/CHX/2016/07/18/f822375f-eb16-4018-bda6_2259_master.h5"
+    transformation: [ [1, 0],
+                      [0, 1]
+                    ]
+# parameters for circavg computations
+circavg:
+    noqs: 800 #partitioning for circular average/qphi maps
+# parameters for qphi avg computations
+qphiavg:
+    noqs: 800 #partitioning for circular average/qphi maps
+    nophis: 360 #partitioning for qphimaps in phi
+deltaphicorr:
+    noqs: 800 #partitioning for circular average/qphi maps
+    nophis: 360 #partitioning for qphimaps in phi

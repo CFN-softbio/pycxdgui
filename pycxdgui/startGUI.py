@@ -13,7 +13,7 @@ DDIR = "/media/xray/NSLSII_Data/CHX"
 SDIR = "../storage"
 sxsdesc = "B002.sxs"
 
-configfile = "saxsgui-config.csv"
+configfile = "saxsgui-config.yml"
 
 def is_interactive():
     import __main__ as main

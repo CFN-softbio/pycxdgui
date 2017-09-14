@@ -181,6 +181,17 @@ class SAXSWidget(QtGui.QWidget):
                 # lookup table, but I have limited time)
                 if levels == (0,1):
                     levels = 0,10
+                # get image transformation
+                trans = self.saxsdata.saxsdata.getelem("setup","transformation")
+                axis1 = np.argmax(np.abs(trans[0]))
+                axis2 = np.argmax(np.abs(trans[1]))
+                imgp = self.imgdata_processed
+                imgp = np.transpose(imgp, axes=(axis1, axis2))
+                # should be +/- 1 else will give error
+                # quickly written
+                imgp = imgp[::trans[0][axis1], ::trans[1][axis2]]
+                self.imgdata_processed = imgp
+
                 self.image_imv.setImage(self.imgdata_processed.T,levels=levels)
                 self.image_imv.setHistogramRange(low, high)
                 self.image_imv.show()

@@ -1,6 +1,7 @@
 import pyqtgraph as pg
 import numpy as np
 from PyQt5 import QtGui, QtCore
+import yaml
 
 import pyqtgraph.parametertree.parameterTypes as pTypes
 from pyqtgraph.parametertree import Parameter, ParameterTree,\
@@ -86,6 +87,7 @@ setuplst =  [
         ['energy', 'float', np.nan],
         ['qperpixel', 'float', np.nan],
         ['filename', 'str', ""],
+        ['transformation', 'str', [[1,0],[0,1]]],
     ]
 
 intanallst = [
@@ -134,7 +136,8 @@ class SAXSDataTree(DataTree):
         super(SAXSDataTree, self).__init__(params)
         self.params = params
         if configfile is not None:
-            self.loadfromcsv(configfile)
+            #self.loadfromcsv(configfile)
+            self.loadfromyml(configfile)
         # now calculate typical SAXS stuff
         self.calc_q()
 
@@ -147,6 +150,14 @@ class SAXSDataTree(DataTree):
         if a is not None and L is not None and wv is not None:
             qperpixel = calc_q(L,a,wv)
         self.setelem("setup", "qperpixel", qperpixel)
+
+    def loadfromyml(self, configfile):
+        f = open(configfile)
+        # dict from the yaml
+        dd = yaml.load(f)
+        for mainkey, mainentry in dd.items():
+            for subkey, subval in mainentry.items():
+                self.setelem(mainkey, subkey, subval)
 
     def loadfromcsv(self,configfile):
         ''' Load from a csv config file
@@ -162,6 +173,8 @@ class SAXSDataTree(DataTree):
                 setup, noqs, 1
         '''
         try:
+            # use yaml to read just as it read file, useful for intelligently
+            # reading lists into lists, not strings
             if hasattr(self.p, "child"):
                 # VERSION for backwards compatibility with pyqtgraph version 0.9.9
                 par1 = self.p.child(parent)
@@ -180,11 +193,13 @@ class SAXSDataTree(DataTree):
                 # VERSION for backwards compatibility with pyqtgraph version 0.9.9
                 par1 = self.p.child(parent)
                 par2 = par1.child(name)
-                return par2.value()
+                value = par2.value()
             else:
                 par1 = self.p.param(parent)
                 par2 = par1.param(name)
-                return par2.value()
+                value = par2.value()
+            value = yaml.load("{}: {}".format(name, value))[name]
+            return value
         except Exception:
             print("Could not find value, returning None")
             return None
