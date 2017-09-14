@@ -13,7 +13,12 @@ DDIR = "/media/xray/NSLSII_Data/CHX"
 SDIR = "../storage"
 sxsdesc = "B002.sxs"
 
-configfile = "saxsgui-config.yml"
+import os
+
+if len(sys.argv) > 1:
+	configfile = os.path.abspath(os.path.expanduser(sys.argv[1]))
+else:
+	configfile = os.path.expanduser("~/software/saxsgui-config.yml")
 
 def is_interactive():
     import __main__ as main
