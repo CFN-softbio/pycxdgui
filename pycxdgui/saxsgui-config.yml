@@ -15,7 +15,7 @@ setup:
     # wait time for file listening
     wait_time: .1
     # the initial mask name
-    mask_name: "test.tiff"
+    #mask_name: "test.tiff"
     # the values that define masked and unmasked region >=
     mask_threshold: 1
     # sample detector distance
@@ -24,7 +24,7 @@ setup:
     wavelength: 1.285299  # in angstroms
     dpix: 172 # pixel size in um
     # first filename to load
-    filename: "/media/xray/NSLSII_Data/CHX/2016/07/18/f822375f-eb16-4018-bda6_2259_master.h5"
+    #filename: "/media/xray/NSLSII_Data/CHX/2016/07/18/f822375f-eb16-4018-bda6_2259_master.h5"
     transformation: [ [1, 0],
                       [0, 1]
                     ]

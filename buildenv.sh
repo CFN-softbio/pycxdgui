@@ -1,7 +1,7 @@
 # directory to save the gui to
 SOFTWAREDIR=~/software
 
-conda create -n pycxdgui python=3.5 qt=4 pyqtgraph numpy h5py pip
+conda create -n pycxdgui python=3.5 qt=5 pyqtgraph numpy h5py pip
 source activate pycxdgui
 pip install pims pillow tqdm scipy scikit-image pandas cython
 

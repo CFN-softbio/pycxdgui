@@ -24,7 +24,7 @@ class FileListener(QThread):
                 - if the newest file is deleted, then it will find last newest
                 - if directory is deleted, it won't emit any signals anymore
     '''
-    signal_newerfile = pyqtSignal()
+    signal_newerfile = pyqtSignal(str)
 
     def __init__(self, parent=None, wait_time=1):
         super(QThread, self).__init__(parent)
@@ -51,7 +51,7 @@ class FileListener(QThread):
                 print("Found new file: {}".format(result))
                 # TODO : fix file listener (signal passing args problem)
                 print("ignoring for now")
-                #self.signal_newerfile.emit(result)
+                self.signal_newerfile.emit(result)
 
     def check_newest_file(self):
         ''' Check for latest image in directory
