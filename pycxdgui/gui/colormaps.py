@@ -1,4 +1,4 @@
-import pyqtgraph as pg
+from pycxdgui import pyqtgraph as pg
 import numpy as np
 
 def makeALBULACmap():

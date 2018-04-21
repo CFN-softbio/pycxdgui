@@ -1,4 +1,4 @@
-import pyqtgraph as pg
+from pycxdgui import pyqtgraph as pg
 from PyQt5 import QtGui
 from gui.guitools import findLowHigh
 

@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtCore
 
-import pyqtgraph as pg
+from .. import pyqtgraph as pg
 from tools.smooth import smooth2Dgauss
 from tools.circavg2 import circavg2
 from gui.ImageWindow import ImageWindow, ImageMainWindow

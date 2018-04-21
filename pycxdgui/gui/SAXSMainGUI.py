@@ -23,7 +23,7 @@ from .DataTree import SAXSDataTree
 from .colormaps import makeALBULACmap
 from .FileListener import FileListener
 
-import pyqtgraph as pg
+from .. import pyqtgraph as pg
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 from PyQt5 import QtCore

@@ -1,10 +1,10 @@
-import pyqtgraph as pg
+from pycxdgui import pyqtgraph as pg
 import numpy as np
 from PyQt5 import QtGui, QtCore
 import yaml
 
-import pyqtgraph.parametertree.parameterTypes as pTypes
-from pyqtgraph.parametertree import Parameter, ParameterTree,\
+import pycxdgui.pyqtgraph.parametertree.parameterTypes as pTypes
+from pycxdgui.pyqtgraph.parametertree import Parameter, ParameterTree,\
         ParameterItem, registerParameterType
 
 from tools.optics import calc_q
