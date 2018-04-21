@@ -1,4 +1,5 @@
 from detector.eiger import EigerImages
+from readers.IMMFile import IMMFile
 from PIL import Image
 #from tifffile import TiffFile
 
@@ -303,6 +304,13 @@ class SAXSGUI(QtGui.QMainWindow):
                         self.imgreader = np.average(self.imgreader,axis=2)
                     # then make 3D t series (of one image)
                     self.imgreader = np.array([self.imgreader])
+                except IOError:
+                    print("Error could not read file")
+                    return False
+            elif 'imm' in filename:
+                try:
+                    self.imgreader = IMMFile(filename)
+
                 except IOError:
                     print("Error could not read file")
                     return False
