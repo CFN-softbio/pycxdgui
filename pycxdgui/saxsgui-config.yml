@@ -4,27 +4,27 @@
 # comment out rows you don't want
 setup:
     # default extension to look for
-    extension: ".tiff"
+    extension: ".imm"
     # the parent directory
     DDIR: "." 
     # the storage directory
     SDIR: "."
     # beam center
-    xcen: 258
-    ycen: 336
+    xcen: 1313.39
+    ycen: 1267.81
     # wait time for file listening
     wait_time: .1
     # the initial mask name
-    mask_name: "test.tiff"
+    mask_name: "/home/lhermitte/research/projects/julanal_yr/data/mask_gep6cC.hd5"
     # the values that define masked and unmasked region >=
     mask_threshold: 1
     # sample detector distance
-    rdet: 5
-    energy: 9.646  # in keV
-    wavelength: 1.285299  # in angstroms
-    dpix: 172 # pixel size in um
+    rdet: 3.800 # in m
+    energy: 7.44137  # in keV
+    wavelength: 1.6660910558136472  # in angstroms
+    dpix: 20 # pixel size in um
     # first filename to load
-    filename: "/media/xray/NSLSII_Data/CHX/2016/07/18/f822375f-eb16-4018-bda6_2259_master.h5"
+    filename: "/home/lhermitte/research/projects/julanal_yr/data/gep6cC_4_00641-01150.imm"
     transformation: [ [1, 0],
                       [0, 1]
                     ]

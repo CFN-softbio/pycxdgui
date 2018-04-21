@@ -826,7 +826,9 @@ def rescaleData(data, scale, offset, dtype=None):
         #p = np.poly1d([scale, -offset*scale])
         #data = p(data).astype(dtype)
         d2 = data-offset
-        d2 *= scale
+        #d2 *= scale
+        # slower but guarantees types will match
+        d2 = d2*scale
         data = d2.astype(dtype)
     return data
     
@@ -1511,7 +1513,9 @@ def isocurve(data, level, connected=False, extendToEdge=False, path=False):
             #vertIndex = i - 2*j*i + 3*j + 4*k  ## this is just to match Bourk's vertex numbering scheme
             vertIndex = i+2*j
             #print i,j,k," : ", fields[i,j,k], 2**vertIndex
-            index += fields[i,j] * 2**vertIndex
+            #index += fields[i,j] * 2**vertIndex
+            # slower but safer
+            index = index + fields[i,j] * 2**vertIndex
             #print index
     #print index
     

@@ -31,7 +31,7 @@ def makeALBULACmap():
     RGB= RGB/255. #make float 0 to 1
 
     #pos = np.linspace(0, 1, 255*3)
-    pos = np.linspace(0, 1, 4)
+    pos = np.linspace(0, 1, 5)
     cmap = pg.ColorMap(pos,RGB)
 
     return cmap
