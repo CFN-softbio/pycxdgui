@@ -1,5 +1,5 @@
 from detector.eiger import EigerImages
-from readers.IMMFile import IMMFile
+from .readers.IMMFile import IMMFile
 from PIL import Image
 #from tifffile import TiffFile
 
