@@ -15,7 +15,6 @@ DDIR = "/media/xray/NSLSII_Data/CHX"
 SDIR = "../storage"
 sxsdesc = "B002.sxs"
 
-configfile = pkg_resources.resource_filename("pycxdgui", "saxsgui-config.yml")
 
 def is_interactive():
     import __main__ as main
@@ -30,7 +29,10 @@ if __name__ == "__main__":
     if not is_interactive():
         sys.exit(app.exec_())
 
-def run():
+def run(configfile=None):
+    if configfile is None:
+        # TODO : replace with search path
+        configfile = pkg_resources.resource_filename("pycxdgui", "saxsgui-config.yml")
     # Necessary for a pyQt application to work
     print("starting GUI")
     app = QtGui.QApplication(sys.argv)

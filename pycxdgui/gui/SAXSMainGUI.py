@@ -4,6 +4,8 @@ import pkg_resources
 
 icons_path = pkg_resources.resource_filename('pycxdgui', '/icons')
 
+from PyQt5.QtCore import QSettings
+
 from PIL import Image
 #from tifffile import TiffFile
 
@@ -73,6 +75,7 @@ class SAXSGUI(QtGui.QMainWindow):
         ''' This starts the SAXS GUI.'''
         super(SAXSGUI, self).__init__()
 
+        self.settings = QSettings('pycxdgui', 'pycxdgui')
         self.imgreader = None
         self.avg_img, self.Ivst = None, None
         self.verbose = verbose
@@ -243,7 +246,11 @@ class SAXSGUI(QtGui.QMainWindow):
                 filt_string = filt_string + ";;"
             filt_string = filt_string + file_filters[key]
 
-        filename, filetype = QtGui.QFileDialog.getOpenFileName(self, 'Open data file', self.getDDIR(), filt_string)
+        default_dir = self.settings.value('image_dir', defaultValue = self.getDDIR(), type = str)
+        filename, filetype = QtGui.QFileDialog.getOpenFileName(self,
+                                                               'Open data file',
+                                                               default_dir, filt_string)
+        self.settings.setValue('image_dir', os.path.dirname(filename))
         if(len(filename)):
             print("opening file {}".format(filename))
             self.load_img(filename=filename)
