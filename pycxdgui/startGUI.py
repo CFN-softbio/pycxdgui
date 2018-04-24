@@ -23,6 +23,7 @@ def is_interactive():
 if __name__ == "__main__":
     # Necessary for a pyQt application to work
     print("starting GUI")
+    configfile = pkg_resources.resource_filename("pycxdgui", "saxsgui-config.yml")
     app = QtGui.QApplication(sys.argv)
     sxgui = SAXSGUI(configfile=configfile, verbose=True)
     sxgui.show()
