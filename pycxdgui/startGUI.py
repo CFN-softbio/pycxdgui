@@ -1,3 +1,5 @@
+import pkg_resources
+
 from PyQt5 import QtGui
 from pycxdgui.gui.SAXSMainGUI import SAXSGUI
 import sys
@@ -13,7 +15,7 @@ DDIR = "/media/xray/NSLSII_Data/CHX"
 SDIR = "../storage"
 sxsdesc = "B002.sxs"
 
-configfile = "saxsgui-config.yml"
+configfile = pkg_resources.resource_filename("pycxdgui", "saxsgui-config.yml")
 
 def is_interactive():
     import __main__ as main
