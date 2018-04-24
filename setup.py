@@ -9,6 +9,7 @@ setuptools.setup(name='pycxdgui',
     author='Julien Lhermitte',
     description="Coherent Xray Diffraction GUI",
     include_dirs=[np.get_include()],
+    packages=setuptools.find_packages(),
     author_email='lhermitte@bnl.gov',
     install_requires=['tifffile', 'pims', 'scikit-beam', 'numpy'],  # essential deps only
 #    install_requires=['six', 'numpy'],  # essential deps only
