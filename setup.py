@@ -12,7 +12,14 @@ setuptools.setup(name='pycxdgui',
     packages=setuptools.find_packages(),
     author_email='lhermitte@bnl.gov',
     install_requires=['tifffile', 'pims', 'scikit-beam', 'numpy'],  # essential deps only
-#    install_requires=['six', 'numpy'],  # essential deps only
     keywords='Image Processing Analysis',
+    package_data={'pycxdgui':
+                     ['saxsgui-config.csv', 'saxsgui-config.yml',
+                      'icons/*',
+                      'pyqtgraph/*/*.ui', 'pyqtgraph/*/*/*.ui',
+                      'pyqtgraph/*/*.m', 'pyqtgraph/*/*.png',
+                      'pyqtgraph/*/*.svg', 'pyqtgraph/tests/*',
+                      'pyqtgraph/util/colorama/*.txt']},
+    include_package_data=True,
     license='BSD',
-     )
+)
