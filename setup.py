@@ -12,6 +12,7 @@ setuptools.setup(name='pycxdgui',
     packages=setuptools.find_packages(),
     author_email='lhermitte@bnl.gov',
     install_requires=['tifffile', 'pims', 'scikit-beam', 'numpy'],  # essential deps only
+    package_data={'pycxdgui': ['icons/*', 'pyqtgraph/*/*.ui']},
 #    install_requires=['six', 'numpy'],  # essential deps only
     keywords='Image Processing Analysis',
     license='BSD',
