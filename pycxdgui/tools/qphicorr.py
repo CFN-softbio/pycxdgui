@@ -3,12 +3,12 @@ from numpy.fft import ifft, fft, fftshift
 import numpy as np
 
 #nneded for qphi correlations
-from tools.coordinates import mkpolar
-from tools.partitions import linplist, partition2D
-from tools.partitions import partition_sum, partition_avg
-from tools.qphiavg import qphiavg
-from tools.convol import convol1d
-from tools.interpolations import fillin1d
+from .coordinates import mkpolar
+from .partitions import linplist, partition2D
+from .partitions import partition_sum, partition_avg
+from .qphiavg import qphiavg
+from .convol import convol1d
+from .interpolations import fillin1d
 
 def normsqcphi(sqcphi,off=1):
     ''' normalize the sqphic, routine thing to do'''

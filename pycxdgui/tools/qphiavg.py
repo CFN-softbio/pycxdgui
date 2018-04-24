@@ -1,9 +1,9 @@
 # qphi average routines
 import numpy as np
-from tools.coordinates import mkpolar
-from tools.partitions import linplist, partition1D, partition2D
-from tools.partitions import partition_avg, partition_sum
-from tools.interpolations import fillin1d
+from .coordinates import mkpolar
+from .partitions import linplist, partition1D, partition2D
+from .partitions import partition_avg, partition_sum
+from .interpolations import fillin1d
 
 def qphiavg_getlists(img,x0=None,y0=None,mask=None,SIMG=None,qlist=None,philist=None,noqs=None,nophis=None,interp=None):
     ''' get lists from data.'''
