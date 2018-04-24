@@ -1,6 +1,6 @@
 import pkg_resources
 
-icons_path = pkg_resources.resource_filename('pycxdgui', icons_path + '')
+icons_path = pkg_resources.resource_filename('pycxdgui', '/icons')
 
 #Mask Polygon Classes
 import numpy as np

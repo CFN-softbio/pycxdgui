@@ -2,7 +2,7 @@ from ..detector.eiger import EigerImages
 from ..readers.IMMFile import IMMFile
 import pkg_resources
 
-icons_path = pkg_resources.resource_filename('pycxdgui', icons_path + '')
+icons_path = pkg_resources.resource_filename('pycxdgui', '/icons')
 
 from PIL import Image
 #from tifffile import TiffFile
