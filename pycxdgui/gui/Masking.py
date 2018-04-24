@@ -1,3 +1,7 @@
+import pkg_resources
+
+icons_path = pkg_resources.resource_filename('pycxdgui', icons_path + '')
+
 #Mask Polygon Classes
 import numpy as np
 from .. import pyqtgraph as pg
@@ -59,59 +63,59 @@ class MPoly(QtGui.QMainWindow):
         self.statusBar().showMessage('Ready')
 
         #make a toolbar
-        self.polymAction = QtGui.QAction(QtGui.QIcon('icons/mpolyicon.png'), 'MakePoly', self)
+        self.polymAction = QtGui.QAction(QtGui.QIcon(icons_path + '/mpolyicon.png'), 'MakePoly', self)
         self.polymAction.setStatusTip('Make Poly ROI')
         self.polymAction.triggered.connect(self.startPolyCapture)
 
-        self.circlemAction = QtGui.QAction(QtGui.QIcon('icons/roicircleicon.png'), 'MakeCircle', self)
+        self.circlemAction = QtGui.QAction(QtGui.QIcon(icons_path + '/roicircleicon.png'), 'MakeCircle', self)
         self.circlemAction.setStatusTip('Make Circle ROI')
         self.circlemAction.triggered.connect(self.makeCircleROI)
 
-        self.ellipsemAction = QtGui.QAction(QtGui.QIcon('icons/roiellipseicon.png'), 'MakeEllipse', self)
+        self.ellipsemAction = QtGui.QAction(QtGui.QIcon(icons_path + '/roiellipseicon.png'), 'MakeEllipse', self)
         self.ellipsemAction.setStatusTip('Make Ellipse ROI')
         self.ellipsemAction.triggered.connect(self.makeEllipseROI)
 
-        self.rectmAction = QtGui.QAction(QtGui.QIcon('icons/roisquareicon.png'), 'MakeRect', self)
+        self.rectmAction = QtGui.QAction(QtGui.QIcon(icons_path + '/roisquareicon.png'), 'MakeRect', self)
         self.rectmAction.setStatusTip('Make Rectangular ROI')
         self.rectmAction.triggered.connect(self.makeRectROI)
 
-        self.clearROIAction = QtGui.QAction(QtGui.QIcon('icons/roiclearicon.png'), 'ClearROI', self)
+        self.clearROIAction = QtGui.QAction(QtGui.QIcon(icons_path + '/roiclearicon.png'), 'ClearROI', self)
         self.clearROIAction.setStatusTip('Clear ROI')
         self.clearROIAction.triggered.connect(self.clearROI)
 
-        self.imaskAction = QtGui.QAction(QtGui.QIcon('icons/imaskicon.png'), 'IMask', self)
+        self.imaskAction = QtGui.QAction(QtGui.QIcon(icons_path + '/imaskicon.png'), 'IMask', self)
         self.imaskAction.setStatusTip('Include the region in mask')
         self.imaskAction.triggered.connect(self.imaskFromROI)
 
-        self.xmaskAction = QtGui.QAction(QtGui.QIcon('icons/xmaskicon.png'), 'XMask', self)
+        self.xmaskAction = QtGui.QAction(QtGui.QIcon(icons_path + '/xmaskicon.png'), 'XMask', self)
         self.xmaskAction.setStatusTip('Exclude the region in mask')
         self.xmaskAction.triggered.connect(self.xmaskFromROI)
 
-        self.clearMaskAction = QtGui.QAction(QtGui.QIcon('icons/clearmaskicon.png'), 'ClearMask', self)
+        self.clearMaskAction = QtGui.QAction(QtGui.QIcon(icons_path + '/clearmaskicon.png'), 'ClearMask', self)
         self.clearMaskAction.setStatusTip('Clear the mask')
         self.clearMaskAction.triggered.connect(self.clearMask)
 
-        self.saveMaskAction = QtGui.QAction(QtGui.QIcon('icons/savemaskicon.png'), 'Save Mask', self)
+        self.saveMaskAction = QtGui.QAction(QtGui.QIcon(icons_path + '/savemaskicon.png'), 'Save Mask', self)
         self.saveMaskAction.setStatusTip('Save the mask')
         self.saveMaskAction.triggered.connect(self.saveMask)
 
-        self.openMaskAction = QtGui.QAction(QtGui.QIcon('icons/loadmaskicon.png'), 'Load Mask', self)
+        self.openMaskAction = QtGui.QAction(QtGui.QIcon(icons_path + '/loadmaskicon.png'), 'Load Mask', self)
         self.openMaskAction.setStatusTip('Load the mask')
         self.openMaskAction.triggered.connect(self.openMask)
 
-        self.loadBlemishAction = QtGui.QAction(QtGui.QIcon('icons/loadblemish.png'), 'Load Blemish', self)
+        self.loadBlemishAction = QtGui.QAction(QtGui.QIcon(icons_path + '/loadblemish.png'), 'Load Blemish', self)
         self.loadBlemishAction.setStatusTip('Load the Blemish file')
         self.loadBlemishAction.triggered.connect(self.loadBlemish)
 
-        self.selectAllAction = QtGui.QAction(QtGui.QIcon('icons/selectall.png'), 'Select All', self)
+        self.selectAllAction = QtGui.QAction(QtGui.QIcon(icons_path + '/selectall.png'), 'Select All', self)
         self.selectAllAction.setStatusTip('Select All')
         self.selectAllAction.triggered.connect(self.selectAll)
 
-        self.sendMaskAction = QtGui.QAction(QtGui.QIcon('icons/sendmask.png'), 'Send Mask to Data', self)
+        self.sendMaskAction = QtGui.QAction(QtGui.QIcon(icons_path + '/sendmask.png'), 'Send Mask to Data', self)
         self.sendMaskAction.setStatusTip('Send Mask to Data')
         self.sendMaskAction.triggered.connect(self.sendMask)
 
-        self.exitAction = QtGui.QAction(QtGui.QIcon('icons/exit.png'), '&Exit', self)
+        self.exitAction = QtGui.QAction(QtGui.QIcon(icons_path + '/exit.png'), '&Exit', self)
         self.exitAction.setStatusTip('Close')
         self.exitAction.triggered.connect(self.callExit)
 

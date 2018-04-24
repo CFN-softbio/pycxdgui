@@ -1,5 +1,9 @@
 from ..detector.eiger import EigerImages
 from ..readers.IMMFile import IMMFile
+import pkg_resources
+
+icons_path = pkg_resources.resource_filename('pycxdgui', icons_path + '')
+
 from PIL import Image
 #from tifffile import TiffFile
 
@@ -109,27 +113,27 @@ class SAXSGUI(QtGui.QMainWindow):
         menubar = self.menuBar()
 
         # icon, shortcut, description, action (function)
-        loadEAction = self.mkAction('icons/load_image_icon.jpg', '&Open Image File',
+        loadEAction = self.mkAction(icons_path + '/load_image_icon.jpg', '&Open Image File',
                                     None, 'Open Image File', self.openmasterfile)
-        loadMAction = self.mkAction('icons/load_mask_icon.jpg', '&Open Mask File',
+        loadMAction = self.mkAction(icons_path + '/load_mask_icon.jpg', '&Open Mask File',
                                     None, 'Open Mask File', self.openmaskfile)
-        maskAction = self.mkAction('icons/mpolyicon.png', '&Make Mask',
+        maskAction = self.mkAction(icons_path + '/mpolyicon.png', '&Make Mask',
                                    None, 'Make new mask', self.startmasking)
-        dataTableAction = self.mkAction('icons/datatable_icon.png', 'View Data Table',
+        dataTableAction = self.mkAction(icons_path + '/datatable_icon.png', 'View Data Table',
                                    None, 'View Data Table', self.showDataTable)
-        circAvgAction = self.mkAction('icons/circavg_icon.png', 'Plot &Circular Average',
+        circAvgAction = self.mkAction(icons_path + '/circavg_icon.png', 'Plot &Circular Average',
                                    None, 'Plot Circular Average', self.circavg)
-        sqphiAction = self.mkAction('icons/sqphi_icon.png', 'Plot Qphi Map',
+        sqphiAction = self.mkAction(icons_path + '/sqphi_icon.png', 'Plot Qphi Map',
                                    None, 'Plot QPhi Map', self.qphimap)
-        deltaphicorrAction = self.mkAction('icons/deltaphicorr.png', 'Plot Delta Phi Corr Map',
+        deltaphicorrAction = self.mkAction(icons_path + '/deltaphicorr.png', 'Plot Delta Phi Corr Map',
                                    None, 'Plot Delta Phi Corr Map', self.deltaphicorr)
-        listenToggleAction = self.mkAction('icons/listen_icon.png', 'Toggle listen',
+        listenToggleAction = self.mkAction(icons_path + '/listen_icon.png', 'Toggle listen',
                                    None, 'Toggle listen', self.toggle_listen_for_newfiles)
 
-        aspectToggleAction = self.mkAction('icons/lock_aspect_icon.png', 'Lock/Unlock Aspect Ratio',
+        aspectToggleAction = self.mkAction(icons_path + '/lock_aspect_icon.png', 'Lock/Unlock Aspect Ratio',
                                    None, 'Lock/Unlock Aspect Ratio', self.toggle_aspect)
 
-        exitAction = self.mkAction('icons/exit_icon.png', '&Exit', 'Ctrl+W',
+        exitAction = self.mkAction(icons_path + '/exit_icon.png', '&Exit', 'Ctrl+W',
                                    'Exit Application', QtWidgets.qApp.quit)
 
         # menu bar
