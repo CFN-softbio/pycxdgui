@@ -3,11 +3,11 @@
 from pycxdgui import pyqtgraph as pg
 import numpy as np
 
-from gui.colormaps import makeALBULACmap, makeALBULALUT
-from gui.guitools import findLowHigh
+from .colormaps import makeALBULACmap, makeALBULALUT
+from .guitools import findLowHigh
 from PyQt5 import QtCore
 
-from tools.smooth import smooth2Dgauss
+from ..tools.smooth import smooth2Dgauss
 
 class ImageAnalWindow(pg.GraphicsLayoutWidget):
     def __init__(self,data,levels=None, maxcts=65535, iso=True, parent=None):

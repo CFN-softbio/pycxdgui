@@ -7,9 +7,9 @@ import pycxdgui.pyqtgraph.parametertree.parameterTypes as pTypes
 from pycxdgui.pyqtgraph.parametertree import Parameter, ParameterTree,\
         ParameterItem, registerParameterType
 
-from tools.optics import calc_q
+from ..tools.optics import calc_q
 
-from classes.Calibration import Calibration
+from ..classes.Calibration import Calibration
 
 def calibration_from_datatree(saxsdata, det_width, det_height):
     ''' Compute a calibration instance from saxsdata tree and

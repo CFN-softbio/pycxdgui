@@ -1,6 +1,6 @@
 import numpy as np
 from skbeam.core.accumulators.binned_statistic import BinnedStatistic1D
-from tools.center2edge import center2edge
+from .center2edge import center2edge
 
 def circavg2(image, q_map=None, r_map=None,  bins=None, mask=None):
     ''' computes the circular average.
