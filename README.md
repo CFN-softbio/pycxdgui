@@ -10,6 +10,16 @@ Dependencies:
 
 - python3.5 PyQt4 numpy h5py pip
 - pims pillow tqdm scipy scikit-image pandas cython
+- pyqtgraph. This has been copied from the
+  [pyqgraph](https://github.com/pyqtgraph/pyqtgraph) repository from commit
+  4752b777921f54b3a23dfc2952697ddf11922112.
+  To retrieve this code, run the following:
+  ```bash
+  git clone https://github.com/pyqtgraph/pyqtgraph
+  cd pyqtgraph
+  git checkout 4752b777921f54b3a23dfc2952697ddf11922112
+  ```
+
 
 Credits:
 Some of the icons were provided for free online by various authors. 
