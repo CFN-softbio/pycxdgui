@@ -53,7 +53,7 @@ setup:
     # wait time for file listening
     wait_time: .1
     # the initial mask name
-    mask_name: "/home/lhermitte/research/projects/julanal_yr/data/mask_gep6cC.hd5"
+    mask_name: "/path/to/mask.hd5"
     # the values that define masked and unmasked region >=
     mask_threshold: 1
     # sample detector distance
@@ -62,7 +62,7 @@ setup:
     wavelength: 1.6660910558136472  # in angstroms
     dpix: 20 # pixel size in um
     # first filename to load
-    filename: "/home/lhermitte/research/projects/julanal_yr/data/gep6cC_4_00641-01150.imm"
+    filename: "/path/to/filename.tiff"
     transformation: [ [1, 0],
                       [0, 1]
                     ]
